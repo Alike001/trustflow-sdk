@@ -148,6 +148,23 @@ if (status.data.isReady) {
 - `.getProfile(address)` — fetch a user's profile (automatic retry on transient backend failures)
 - `.updateProfile(address, params)` — update a user's profile (automatic retry on transient backend failures)
 
+## WebAuthnManager
+
+`WebAuthnManager` provides registration challenge creation and complete
+WebAuthn assertion verification. `WebAuthnCredentialOptions`,
+`WebAuthnRegistrationOptions`, `WebAuthnSignatureResponse`,
+`WebAuthnVerificationOptions`, and `WebAuthnKeyDerivationOptions` are exported
+types.
+
+- `createRegistrationChallenge(options)` returns credential creation options.
+- `deriveSmartAccountKeypair(credential, userId, { secret })` requires a
+  private secret of at least 32 bytes; public credential data and user ID alone
+  are not sufficient to derive an account key.
+- `verifySignature(credential, signature, options)` is asynchronous and checks
+  the client-data type, expected challenge and origin, RP ID hash, flags,
+  authenticator counter, COSE public key, and ES256/RS256 signature. Challenge
+  freshness and one-time consumption remain server integration responsibilities.
+
 ## IPFSStorage
 - `new IPFSStorage(config?)` — `config.apiUrl` (default: web3.storage-compatible upload API), `config.apiKey`, `config.gatewayUrl`
 - `.upload(file, options?)` — uploads a `Buffer`, `Uint8Array`, `ArrayBuffer`, `Blob` or browser `File` (a `File`'s `name` and a `Blob`'s `type` are used as the default `filename` / `contentType`); the request goes to `apiUrl` exactly as configured (no slash appended, query string kept); returns `SDKResult<{ cid, url }>`
